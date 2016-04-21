@@ -6,17 +6,16 @@ $config = array();
 $config['mysqldbhost']   = 'localhost';
 $config['mysqldbuser']   = 'root';
 $config['mysqldbpass']   = '';
-$config['mysqldbname']   = 'rmp';
+$config['mysqldbname']   = 'giegie';
 $config['dbmethod'] = 'mysql:dbname=';
+// API Auth Key
+$config['authkey'] = "8276c030a577d315cbf7403b0ea9af1e";
+
 Utility::saveConfig($config);
 Utility::mysqlRes();
 
-// API AuthKey
-
-
 class Utility {
 	static $config = array();
-	static $authkey = "f7403b0ea9af1e8276c030a577d315cb";
 	public static function getConfig($key){
 		return self::$config[$key];
 	}
@@ -39,7 +38,6 @@ class Utility {
                 header("Content-Type: application/json");
                 die (json_encode($response));
             }
-		
 	}
 }
 ?>
