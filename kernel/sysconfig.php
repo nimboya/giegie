@@ -9,7 +9,7 @@ $config['mysqldbpass']   = '';
 $config['mysqldbname']   = 'giegie';
 $config['dbmethod'] = 'mysql:dbname=';
 // API Auth Key
-$config['authkey'] = "8276c030a577d315cbf7403b0ea9af1e";
+$config['authkey'] = "syskey";
 
 Utility::saveConfig($config);
 Utility::mysqlRes();
