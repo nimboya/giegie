@@ -165,7 +165,7 @@ class User {
 	  $lat = isset($regparams['lat']) ? trim($regparams['lat']) : null;
 	  
 	  // Input Validation
-	  if(strlen(trim($phone)) === 0){
+	  if(strlen(trim($phone)) === 0) {
             $errors[] = "Please enter your phone number!";
 	  }
 	 
@@ -174,7 +174,7 @@ class User {
                 //Process Registration.
 		$proc = $db->users()->insert($regparams);
 		$response = array('error_code'=>0,'status'=>'ok','description'=>'Successfully Activated'); 
-            } else {
+          } else {
 		$errors = implode(",",$errors);
 		$response = array('error_code'=>1,'status'=>'failed','description'=>$errors);
 	  }
@@ -195,76 +195,6 @@ class User {
 	  return $status;
   }
   
-   public static function EmailExistsProf($email) {
-	  $db = Utility::mysqlRes();
-	  $status = false;
-	  $response = array();
-	  $total = $db->students()->where("email",$email)->count();
-	  
-	  if ($total > 0) {
-		  $status = false;
-	  } else {
-		  $status = true;
-	  }
-	  return $status;
-  }
-  
-  public static function ProfRegister($regparams) { 
-	// Db Connection Utility
-	  $db = Utility::mysqlRes();
-	  $response = array();
-	  $errors = array();
-	  
-	  $name = isset($regparams['name']) ? $regparams['name'] : null;
-	  $email = isset($regparams['email']) ? $regparams['email'] : null;
-	  $password = isset($regparams['password']) ? $regparams['password'] : null;
-	  $school = isset($regparams['school']) ? $regparams['school'] : null;
-	  // Input Validation
-	  
-	  if(strlen(trim($name)) === 0){
-        $errors[] = "Please enter your full name!";
-	  }
-	  
-	  if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Email is not valid!";
-	  }
-	  
-	  if(strlen(trim($password)) === 0){
-        $errors[] = "Please enter your password!";
-	  }
-	  
-	  if(strlen(trim($password)) <= 6){
-        $errors[] = "Your password must not be less than 6 characters!";
-	  }
-	  
-	  if(self::EmailExistsProf($email) == false) {
-		$errors[] = "Email Already Used";
-	  }
-	  
-	  if(empty($errors)){
-        //Process Registration.
-		$proc = $db->store->insert($regparams);
-		$response = array('error_code'=>0,'status'=>'ok','description'=>'Success'); 
-      } else {
-		$errors = implode(",",$errors);
-		$response = array('error_code'=>1,'status'=>'failed','description'=>$errors);
-	  }
-	  return $response; 
-  }
-  
-  public static function GetProfProfile($getparams) {
-	$db = Utility::mysqlRes();
-	$profid = isset($getparams['userid']) ? $getparams['userid'] : null;
-	try {
-	  $professors = $db->profs()->where("id",$profid);
-	  foreach($professors as $professor) {
-		$response = $professor;
-	  }
-	} catch (Exception $ex) {
-	   $response = array('error_code'=>0,'status'=>"failed",'description'=>$ex->getMessage());
-	}
-	return $response;
-  }
   
   public static function GetUserProfile($getparams) {
 	$db = Utility::mysqlRes();
