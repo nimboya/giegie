@@ -6,7 +6,7 @@ $config = array();
 $config['mysqldbhost']   = 'localhost';
 $config['mysqldbuser']   = 'root';
 $config['mysqldbpass']   = '';
-$config['mysqldbname']   = 'giegie';
+$config['mysqldbname']   = 'appdb';
 $config['dbmethod'] = 'mysql:dbname=';
 // API Auth Key
 $config['authkey'] = "syskey";
