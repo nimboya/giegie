@@ -7,8 +7,18 @@
 @ Project: giegie Mobile App
 */
 require_once "Slim/Slim.php";
+
 \Slim\Slim::registerAutoloader();
-$app = new \Slim\Slim();
+//Override the default Not Found Handler
+$c['notFoundHandler'] = function ($c) {
+    return function ($request, $response) use ($c) {
+        return $c['response']
+            ->withStatus(404)
+            ->withHeader('Content-Type', 'text/html')
+            ->write('Sorry Did not Find It');
+    };
+};
+$app = new \Slim\Slim($c);
 
 
 // Post is to Create
@@ -122,39 +132,25 @@ $app->post('/createservice', function () use($app) {
 	
 });
 
-$app->get('/getservices', function () use($app) {
-	$params = $app->request()->get();
+$app->get('/getservices', function() use($app) {
+        $params = $app->request()->get();
         try {
             if($params['authkey'] == Utility::getConfig('authkey')) {
-		$response = User::Login($params);
+		$response = Companies::GetServices($params);
 		$app->response()->header("Content-Type", "application/json");
 		echo json_encode($response, JSON_FORCE_OBJECT);
             } else {
-	    $app->response->setStatus(401);
-	    $resp = array('error'=>'true','description'=>'Unauthorized Access');
-	    echo json_encode($resp);
+	   $app->response->setStatus(401);
+           $app->response()->header("Content-Type", "application/json");
+           $resp = array('error_code'=>1,'status'=>'failed','description'=>'Unauthorized Access');
+           echo json_encode($resp); 
             } 
         } catch (Exception $ex) {
-            $app->response->setStatus(401);
-            $app->response()->header("Content-Type", "application/json");
-            $resp = array('error'=>'true','description'=>'Unauthorized Access');
-            echo json_encode($resp); 
+           $app->response->setStatus(401);
+           $app->response()->header("Content-Type", "application/json");
+           $resp = array('error_code'=>1,'status'=>'failed','description'=>'Unauthorized Access');
+           echo json_encode($resp);  
         }
-});
-
-
-$app->get('/getservices', function () use($app) {
-	
-	$params = $app->request()->post();
-	if($params['authkey'] == Utility::getConfig('authkey')) {
-		$response = User::Login($params);
-		$app->response()->header("Content-Type", "application/json");
-		echo json_encode($response, JSON_FORCE_OBJECT);
-        } else {
-	    $app->response->setStatus(401);
-	    $resp = array('error'=>'true','description'=>'Unauthorized Access');
-	    echo json_encode($resp);
-	}
 });
 
 $app->run();

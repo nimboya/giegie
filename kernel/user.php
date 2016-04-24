@@ -181,11 +181,11 @@ class User {
 	  return $response; 
   }
   
-  public static function EmailExists($email) {
+  public static function AlreadyExists($dbcol, $data) {
 	  $db = Utility::mysqlRes();
 	  $status = false;
 	  $response = array();
-	  $total = $db->students()->where("email",$email)->count();
+	  $total = $db->students()->where($dbcol, $data)->count();
 	  
 	  if ($total > 0) {
 		  $status = false;
@@ -216,7 +216,7 @@ class User {
 	return $response;
   }
   
-  public static function FindProfessor($params) {
+  public static function GetUserLocation($params) {
 	  $db = Utility::mysqlRes();
 	  $q = strip_tags($params['q']);
 	  

@@ -29,6 +29,7 @@ class Companies {
             $company = isset($params['company']) ? $params['company'] : null;;
             $cid = isset($params['cid']) ? $params['cid'] : null;;
             $description = isset($params['description']) ? $params['description'] : null;
+            $color = isset($params['color']) ? $params['color'] : null;
             
             if(strlen(trim($company)) === 0) {
                 $errors[] = "Please enter Company Name!";
@@ -40,9 +41,13 @@ class Companies {
                 $errors[] = "Please enter Description";
             }
             
+            if(strlen(trim($description)) === 0) {
+                $errors[] = "Please enter Color";
+            }
+            
             if(empty($errors)) {
                 // Insert Data
-                $companyparams = array('company'=>$company,'cid'=>$cid, 'description'=>$description);
+                $companyparams = array('company'=>$company,'cid'=>$cid, 'description'=>$description, 'color'=>$color);
 		$proc = $db->companies->insert($companyparams);
 		$response = array('error_code'=>0,'status'=>'success','description'=>"Company Created");
             } 
@@ -112,8 +117,9 @@ class Companies {
             $services= $db->services("cid",$cid);
             $response = array();
             if($services->count() > 0) {            
+                //$response = $services;
                 foreach($services as $service) {
-                    $response = $service;
+                    $response[] = $service;
                 }
             } else {
                     $response = array('error_code'=>'0','status'=>'success','description'=>"No Results Found");
