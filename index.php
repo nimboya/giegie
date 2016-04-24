@@ -29,77 +29,121 @@ $app->post("/activate", function () use($app) {
       $app->response()->header("Content-Type", "application/json");
 	  echo json_encode($response, JSON_FORCE_OBJECT);
     } else {
-	  $app->response->setStatus(401);
-	  $resp = array('error'=>'true','description'=>'Unauthorized Access');
-      json_encode($resp);
+	   $app->response->setStatus(401);
+           $app->response()->header("Content-Type", "application/json");
+           $resp = array('error_code'=>1,'status'=>'failed','description'=>'Unauthorized Access');
+           echo json_encode($resp);    
     }
 });
 
-    $app->get('/allcompanies', function () use($app) {
+$app->get('/allcompanies', function () use($app) {
 	$params = $app->request()->get();
-        
-        if(empty($params['authkey'])) {
-            $app->response->setStatus(401);
-            $resp = array('error'=>'true','status'=>'failed','description'=>'No Auth Key');
-        }
         try {
-           if($params['authkey'] == Utility::getConfig('authkey')) {
+            if($params['authkey'] == Utility::getConfig('authkey')) {
 		$response = Companies::AllCompanies($params);
 		$app->response()->header("Content-Type", "application/json");
 		echo json_encode($response, JSON_FORCE_OBJECT);
-        } else {
+            } else {
 	    $app->response->setStatus(401);
-	    $resp = array('error'=>'true','description'=>'Unauthorized Access');
-            echo json_encode($resp);
-	} 
-        } catch (Exception $ex) {
+            $app->response()->header("Content-Type", "application/json");
+            $resp = array('error_code'=>1,'status'=>'failed','description'=>'Unauthorized Access');
+            echo json_encode($resp);    
+            } 
+        } catch     (Exception $ex) {
             $app->response->setStatus(401);
-            $resp = array('error'=>'true','description'=>'Unauthorized Access');
-            echo json_encode($resp);
-        }
-        	
+            $app->response()->header("Content-Type", "application/json");
+            $resp = array('error_code'=>1,'status'=>'failed','description'=>'Unauthorized Access');
+            echo json_encode($resp);    
+        }     	
 });
 
 $app->post('/savecompany', function () use($app) {
 	$params = $app->request()->post();
-	if($params['authkey'] == Utility::getConfig('authkey')) {
-		$response = User::Login($params);
+        try {
+            if($params['authkey'] == Utility::getConfig('authkey')) {
+		$response = Companies::CreateCompany($params);
 		$app->response()->header("Content-Type", "application/json");
 		echo json_encode($response, JSON_FORCE_OBJECT);
-        } else {
-	    $app->response->setStatus(401);
-	    $resp = array('error'=>'true','description'=>'Unauthorized Access');
-	    echo json_encode($resp);
-	}
+            } else {
+                 $app->response->setStatus(401);
+                $app->response()->header("Content-Type", "application/json");
+                $resp = array('error_code'=>1,'status'=>'failed','description'=>'Unauthorized Access');
+                echo json_encode($resp);    
+            }
+        } catch (Exception $ex) {
+             $app->response->setStatus(401);
+            $app->response()->header("Content-Type", "application/json");
+            $resp = array('error_code'=>1,'status'=>'failed','description'=>'Unauthorized Access');
+            echo json_encode($resp);    
+        }
 });
 
 $app->get('/getcompany', function () use($app) {
-	$params = $app->request()->post();
-	if($params['authkey'] == Utility::getConfig('authkey')) {
-		$response = User::Login($params);
-		$app->response()->header("Content-Type", "application/json");
-		echo json_encode($response, JSON_FORCE_OBJECT);
-        } else {
-	    $app->response->setStatus(401);
-	    $resp = array('error'=>'true','description'=>'Unauthorized Access');
-	    echo json_encode($resp);
-	}
-});
-
-$app->post('/services', function () use($app) {
 	$params = $app->request()->get();
-	if($params['authkey'] == Utility::getConfig('authkey')) {
+        try {
+          if($params['authkey'] == Utility::getConfig('authkey')) {
+		$response = Companies::GetCompany($params);
+		$app->response()->header("Content-Type", "application/json");
+		echo json_encode($response, JSON_FORCE_OBJECT);
+          } else {
+	   $app->response->setStatus(401);
+           $app->response()->header("Content-Type", "application/json");
+           $resp = array('error_code'=>1,'status'=>'failed','description'=>'Unauthorized Access');
+           echo json_encode($resp);    
+	  }  
+        } catch (Exception $ex) {
+           $app->response->setStatus(401);
+           $app->response()->header("Content-Type", "application/json");
+           $resp = array('error_code'=>1,'status'=>'failed','description'=>'Unauthorized Access');
+           echo json_encode($resp);    
+        }
+	
+});
+
+$app->post('/createservice', function () use($app) {
+	$params = $app->request()->post();
+        try {
+            if($params['authkey'] == Utility::getConfig('authkey')) {
+		$response = Companies::CreateService($params);
+		$app->response()->header("Content-Type", "application/json");
+		echo json_encode($response, JSON_FORCE_OBJECT);
+            } else {
+                $app->response->setStatus(401);
+                $app->response()->header("Content-Type", "application/json");
+                $resp = array('error_code'=>1,'status'=>'failed','description'=>'Unauthorized Access');
+                echo json_encode($resp);    
+            }
+        } catch (Exception $ex) {
+           $app->response->setStatus(401);
+           $app->response()->header("Content-Type", "application/json");
+           $resp = array('error_code'=>1,'status'=>'failed','description'=>'Unauthorized Access');
+           echo json_encode($resp);    
+        }
+	
+});
+
+$app->get('/getservices', function () use($app) {
+	$params = $app->request()->get();
+        try {
+            if($params['authkey'] == Utility::getConfig('authkey')) {
 		$response = User::Login($params);
 		$app->response()->header("Content-Type", "application/json");
 		echo json_encode($response, JSON_FORCE_OBJECT);
-        } else {
+            } else {
 	    $app->response->setStatus(401);
 	    $resp = array('error'=>'true','description'=>'Unauthorized Access');
 	    echo json_encode($resp);
-	}
+            } 
+        } catch (Exception $ex) {
+            $app->response->setStatus(401);
+            $app->response()->header("Content-Type", "application/json");
+            $resp = array('error'=>'true','description'=>'Unauthorized Access');
+            echo json_encode($resp); 
+        }
 });
 
-$app->get('/services', function () use($app) {
+
+$app->get('/getservices', function () use($app) {
 	
 	$params = $app->request()->post();
 	if($params['authkey'] == Utility::getConfig('authkey')) {
